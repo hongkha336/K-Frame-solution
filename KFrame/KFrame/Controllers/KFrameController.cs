@@ -31,7 +31,14 @@ namespace KFrame.Controllers
                     wb.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
                     var mresponse = wb.DownloadData(mURL);
                     var htmlCode = Encoding.UTF8.GetString(mresponse);
-                    data = htmlCode.ToString();                        
+                    data = htmlCode.ToString();           
+                    if(data.ToLower().IndexOf("html") == -1)
+                    {
+                        var client = new RestClient(mURL);
+                        var request = new RestRequest(Method.GET);
+                        IRestResponse mresponse1 = client.Execute(request);
+                        data = mresponse1.Content;
+                    }
                 }
             }
             catch
